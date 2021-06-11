@@ -1,0 +1,4 @@
+Flask==2.0.1
+gunicorn==20.1.0
+mechanize==0.4.5
+beautifulsoup4==4.9.3
