@@ -1,6 +1,11 @@
 import re
 
 
+class Response:
+    def __init__(self, courses):
+        self.courses = courses
+
+
 class Course:
     def __init__(self, course, name, average, assignments):
         self.course = course
@@ -105,4 +110,4 @@ def main(classes):
                 pass
         courses.append(Course(course, name, average, assignment_list))
 
-    return courses
+    return Response(courses)
