@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 
 import methods
 import parse
@@ -6,8 +6,11 @@ import parse
 app = Flask(__name__)
 
 
-@app.route('/grades/<username>/<password>/<link>', methods=['GET'])
-def get_grades(username, password, link):
+@app.route('/grades', methods=['GET'])
+def get_grades():
+    link = request.args.get('l')
+    username = request.args.get('u')
+    password = request.args.get('p')
     soup = methods.main(username, password, link)
     classes = soup.findAll("div", {"class": "AssignmentClass"})
 
