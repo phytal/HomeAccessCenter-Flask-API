@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 
+import jsonpickle
 import methods
 import parse
 
@@ -16,7 +17,7 @@ def get_grades():
 
     main_grade = parse.main(classes)
 
-    return jsonify(main_grade)
+    return jsonpickle.encode(main_grade, unpicklable=False)
 
 
 if __name__ == '__main__':

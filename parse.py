@@ -1,6 +1,27 @@
 import re
 
-grade = {}
+
+class Course:
+    def __init__(self, course, name, average, assignments):
+        self.course = course
+        self.name = name
+        self.average = average
+        self.assignments = assignments
+
+
+class Assignment:
+    def __init__(self, title_of_assignment, score, date_due, date_assigned, type_of_grade, max_points, can_be_dropped,
+                 total_points, weight, percentage):
+        self.title_of_assignment = title_of_assignment
+        self.score = score
+        self.date_due = date_due
+        self.date_assigned = date_assigned
+        self.type_of_grade = type_of_grade
+        self.max_points = max_points
+        self.can_be_dropped = can_be_dropped
+        self.total_points = total_points
+        self.weight = weight
+        self.percentage = percentage
 
 
 def get_number(local_result):
@@ -21,7 +42,7 @@ def find_name(element):
 
 def find_total_avg(element):
     # grade[total_average] = re.findall('(\d+)', str(element.findAll("span", {"class": "sg-header-heading"})))
-    return re.findall('(\d+)', str(element.findAll("span", {"class": "sg-header-heading"})))  # extracts avg
+    return re.findall('\d+\.\d+', str(element.findAll("span", {"class": "sg-header-heading sg-right"})))  # extracts avg
 
 
 def get_grid(classes):
@@ -59,26 +80,29 @@ def get_grid(classes):
         }
     }
 
-    return temporary
+    return Assignment(title_of_assignment, score, date_due, date_assigned, type_of_grade,
+                      max_points, can_be_dropped, total_points, weight, percentage)
 
 
 def main(classes):
-    grades = {}
+    courses = []
     for class_ in classes:  # like, alg2, chem, etc etc
         grid = class_.findAll("table", {"class": "sg-asp-table"})  # grid
         assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
         full_name = find_name(class_).strip()
         course = re.findall("\w+\s-\s\d+\s", full_name)[0].strip()
         name = re.sub("\w+\s-\s\d+\s", "", full_name).strip()
-        grades[name] = {"course": course, "name": name, "average": find_total_avg(class_)[1]}
+        average = find_total_avg(class_)[0]
+        # grades[name] = {"course": course, "name": name, "average": find_total_avg(class_)[0]}
 
-#TODO: add grade weights for grade predictions
+        assignment_list = []
+        # TODO: add grade weights for grade predictions
         for assignment in assignments:
             try:
                 a = get_grid(assignment)
-                grades[name].update(**a)
-
+                assignment_list.append(a)
             except IndexError:  # it tries to parse the major minor and other averages, that dont match the normal logic, so it errors out, i need to fix this
                 pass
+        courses.append(Course(course, name, average, assignment_list))
 
-    return grades
+    return courses
