@@ -27,8 +27,8 @@ def find_total_avg(element):
 def get_grid(classes):
     results = re.findall(r'(?s)(?<=\<td)(.*?)(?=\<\/td\>)', str(classes))
 
-    date_due = re.findall(r'\d{2}\/\d{2}\/\d{4}', results[0])[0]
-    date_assigned = re.findall(r'\d{2}\/\d{2}\/\d{4}', results[1])[0]
+    date_due = results[0][1:]
+    date_assigned = results[1][1:]
 
     various_things = results[2].splitlines()
     title_of_assignment = str(re.findall(r'(?<=Classwork\: ).*', str(various_things[2]))[0]).replace("&quot;",
@@ -42,8 +42,6 @@ def get_grid(classes):
     score = get_number(results[4])  # actual grade
     total_points = get_number(results[5])
     weight = get_number(results[6])
-    weighted_score = get_number(results[7])
-    weighted_total_points = get_number(results[8])
     percentage = get_number(results[9])
 
     temporary = {
@@ -57,8 +55,6 @@ def get_grid(classes):
             'can_be_dropped': can_be_dropped,
             'total_points': total_points,  # pretty sure this is the same as 'score'
             'weight': weight,
-            'weighted_score': weighted_score,
-            'weighted_total_points': weighted_total_points,
             'percentage': percentage
         }
     }
@@ -71,8 +67,10 @@ def main(classes):
     for class_ in classes:  # like, alg2, chem, etc etc
         grid = class_.findAll("table", {"class": "sg-asp-table"})  # grid
         assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
-        name = find_name(class_)
-        grades[name] = {"average": find_total_avg(class_)[1]}
+        full_name = find_name(class_).strip()
+        course = re.findall("\w+\s-\s\d+\s", full_name)[0].strip()
+        name = re.sub("\w+\s-\s\d+\s", "", full_name).strip()
+        grades[name] = {"course": course, "name": name, "average": find_total_avg(class_)[1]}
 
 #TODO: add grade weights for grade predictions
         for assignment in assignments:
