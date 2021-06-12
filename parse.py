@@ -35,7 +35,6 @@ def get_grid(classes):
                                                                                                      "\"").replace(
         "&amp;", "&")
     type_of_grade = re.findall(r'(?<=Category\: ).*', str(various_things[3]))[0]
-    due_date = re.findall(r'(?<=Due Date\: ).*', str(various_things[4]))[0]
     max_points = re.findall(r'(?<=Max Points\: ).*', str(various_things[5]))[0]
     can_be_dropped = re.findall(r'(?<=Can Be Dropped\: ).*', str(various_things[6]))[
         0]  # dunno what this does, but kept it for completions sake
@@ -54,7 +53,6 @@ def get_grid(classes):
             'date_assigned': date_assigned,
             'title_of_assignment': title_of_assignment,
             'type_of_grade': type_of_grade,
-            'due_date': due_date,
             'max_points': max_points,
             'can_be_dropped': can_be_dropped,
             'total_points': total_points,  # pretty sure this is the same as 'score'
