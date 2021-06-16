@@ -70,21 +70,6 @@ def get_grid(classes):
     weight = get_number(results[6])
     percentage = get_number(results[9])
 
-    temporary = {
-        title_of_assignment: {
-            'score': score,
-            'date_due': date_due,
-            'date_assigned': date_assigned,
-            'title_of_assignment': title_of_assignment,
-            'type_of_grade': type_of_grade,
-            'max_points': max_points,
-            'can_be_dropped': can_be_dropped,
-            'total_points': total_points,  # pretty sure this is the same as 'score'
-            'weight': weight,
-            'percentage': percentage
-        }
-    }
-
     return Assignment(title_of_assignment, score, date_due, date_assigned, type_of_grade,
                       max_points, can_be_dropped, total_points, weight, percentage)
 

@@ -1,7 +1,8 @@
 import urllib
 
-import mechanize
 from bs4 import BeautifulSoup
+import mechanize
+import form
 
 
 def mechanize_method(username, password, link):
@@ -29,7 +30,20 @@ def mechanize_method(username, password, link):
 
     soup = BeautifulSoup(response.read(), "lxml")
 
-    return soup
+    p = form.generate_periods(soup)
+    marking_periods = []
+    for i in p:
+        data = form.generate_form(soup)
+
+        data["ctl00$plnMain$ddlReportCardRuns"] = i
+        req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
+        res = br.open(req).read()
+        marking_periods.append(BeautifulSoup(res, 'lxml'))
+
+    marking_periods.append(soup)
+
+    br.close()
+    return marking_periods
 
 
 def main(u, p, l):

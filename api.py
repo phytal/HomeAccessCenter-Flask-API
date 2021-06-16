@@ -13,11 +13,13 @@ def get_grades():
     username = request.args.get('u')
     password = request.args.get('p')
     soup = methods.main(username, password, link)
-    classes = soup.findAll("div", {"class": "AssignmentClass"})
 
-    main_grade = parse.main(classes)
+    marking_periods = []
+    for x in soup:
+        classes = x.findAll("div", {"class": "AssignmentClass"})
+        marking_periods.append(parse.main(classes))
 
-    return jsonpickle.encode(main_grade, unpicklable=False)
+    return jsonpickle.encode(marking_periods, unpicklable=False)
 
 
 if __name__ == '__main__':
