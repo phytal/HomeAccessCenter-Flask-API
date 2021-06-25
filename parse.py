@@ -11,7 +11,7 @@ class Course:
 
 class Assignment:
     def __init__(self, title_of_assignment, score, date_due, date_assigned, type_of_grade, max_points, can_be_dropped,
-                 total_points, weight, percentage):
+                 total_points, weight, weighted_score, weighted_total_points, percentage):
         self.title_of_assignment = title_of_assignment
         self.score = score
         self.date_due = date_due
@@ -21,6 +21,8 @@ class Assignment:
         self.can_be_dropped = can_be_dropped
         self.total_points = total_points
         self.weight = weight
+        self.weighted_score = weighted_score
+        self.weighted_total_points = weighted_total_points
         self.percentage = percentage
 
 
@@ -63,10 +65,12 @@ def get_grid(classes):
     score = get_number(results[4])  # actual grade
     total_points = get_number(results[5])
     weight = get_number(results[6])
+    weighted_score = get_number(results[7])
+    weighted_total_points = get_number(results[8])
     percentage = get_number(results[9])
 
     return Assignment(title_of_assignment, score, date_due, date_assigned, type_of_grade,
-                      max_points, can_be_dropped, total_points, weight, percentage)
+                      max_points, can_be_dropped, total_points, weight, weighted_score, weighted_total_points, percentage)
 
 
 def main(classes):
