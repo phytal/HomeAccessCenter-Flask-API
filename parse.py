@@ -2,11 +2,12 @@ import re
 
 
 class Course:
-    def __init__(self, course, name, average, assignments):
+    def __init__(self, course, name, average, assignments, grade_types):
         self.course = course
         self.name = name
         self.average = average
         self.assignments = assignments
+        self.grade_types = grade_types
 
 
 class Assignment:
@@ -24,6 +25,12 @@ class Assignment:
         self.weighted_score = weighted_score
         self.weighted_total_points = weighted_total_points
         self.percentage = percentage
+
+
+class GradeType:
+    def __init__(self, category, weight):
+        self.category = category
+        self.weight = weight
 
 
 def get_number(local_result):
@@ -70,7 +77,8 @@ def get_grid(classes):
     percentage = get_number(results[9])
 
     return Assignment(title_of_assignment, score, date_due, date_assigned, type_of_grade,
-                      max_points, can_be_dropped, total_points, weight, weighted_score, weighted_total_points, percentage)
+                      max_points, can_be_dropped, total_points, weight, weighted_score, weighted_total_points,
+                      percentage)
 
 
 def main(classes):
@@ -78,6 +86,12 @@ def main(classes):
     for class_ in classes:  # like, alg2, chem, etc etc
         grid = class_.findAll("table", {"class": "sg-asp-table"})  # grid
         assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
+        categories = grid[1].findAll("tr", {"class": "sg-asp-table-data-row"})
+        grade_data = []
+        for res in categories:
+            dt = res.findAll("td")
+            grade_data.append(GradeType(str(dt[0].string), float(dt[4].string)))
+
         full_name = find_name(class_).strip()
         course = re.findall("\w+\s-\s\d+\s", full_name)[0].strip()
         name = re.sub("\w+\s-\s\d+\s", "", full_name).strip()
@@ -92,6 +106,6 @@ def main(classes):
                 assignment_list.append(a)
             except IndexError:  # it tries to parse the major minor and other averages, that dont match the normal logic, so it errors out, i need to fix this
                 pass
-        courses.append(Course(course, name, average, assignment_list))
+        courses.append(Course(course, name, average, assignment_list, grade_data))
 
     return courses
