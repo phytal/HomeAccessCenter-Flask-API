@@ -69,7 +69,7 @@ def get_grid(classes):
     can_be_dropped = re.findall(r'(?<=Can Be Dropped\: ).*', str(various_things[6]))[
         0]  # dunno what this does, but kept it for completions sake
 
-    score = get_number(results[4])  # actual grade
+    score = results[4].strip()  # actual grade
     total_points = get_number(results[5])
     weight = get_number(results[6])
     weighted_score = get_number(results[7])
