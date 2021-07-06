@@ -28,8 +28,9 @@ class Assignment:
 
 
 class GradeType:
-    def __init__(self, category, weight):
+    def __init__(self, category, grade, weight):
         self.category = category
+        self.grade = grade
         self.weight = weight
 
 
@@ -90,7 +91,7 @@ def main(classes):
         grade_data = []
         for res in categories:
             dt = res.findAll("td")
-            grade_data.append(GradeType(str(dt[0].string), float(dt[4].string)))
+            grade_data.append(GradeType(str(dt[0].string), float(dt[3].string[:-1]), float(dt[4].string)))
 
         full_name = find_name(class_).strip()
         course = re.findall("\w+\s-\s\d+\s", full_name)[0].strip()
