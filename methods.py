@@ -49,12 +49,12 @@ def fetch_grades(br, link, mp):
     marking_periods = []
     # -2: past, -1: current, rest are zero-based
     if mp <= -2:
-        for i in p:
+        for i in range(len(p)-1):
             data = form.generate_form(soup)
-            data["ctl00$plnMain$ddlReportCardRuns"] = i
+            data["ctl00$plnMain$ddlReportCardRuns"] = p[i]
             req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
             res = br.open(req).read()
-            marking_periods.append([BeautifulSoup(res, 'lxml'), i[0]])
+            marking_periods.append([BeautifulSoup(res, 'lxml'), p[i][0]])
 
     else:
         data = form.generate_form(soup)
