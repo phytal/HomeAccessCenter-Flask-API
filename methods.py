@@ -7,6 +7,16 @@ from bs4 import BeautifulSoup
 import form
 
 
+class CurrentMpResponse:
+    def __init__(self, mp):
+        self.mp = mp
+
+
+class PastMpResponse:
+    def __init__(self, mps):
+        self.mps = mps
+
+
 def mechanize_method(username, password, link):
     br = mechanize.Browser()
 
@@ -41,22 +51,17 @@ def fetch_grades(br, link, mp):
     if mp <= -2:
         for i in p:
             data = form.generate_form(soup)
-
             data["ctl00$plnMain$ddlReportCardRuns"] = i
             req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
             res = br.open(req).read()
-            marking_periods.append(BeautifulSoup(res, 'lxml'))
+            marking_periods.append([BeautifulSoup(res, 'lxml'), i[0]])
 
-        marking_periods.append(soup)
     else:
         data = form.generate_form(soup)
-
         data["ctl00$plnMain$ddlReportCardRuns"] = p[mp]
         req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
         res = br.open(req).read()
-        marking_periods.append(BeautifulSoup(res, 'lxml'))
-
-        marking_periods.append(soup)
+        marking_periods.append([BeautifulSoup(res, 'lxml'), p[mp][0]])
 
     br.close()
     return marking_periods

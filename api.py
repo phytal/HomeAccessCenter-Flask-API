@@ -7,17 +7,23 @@ import parse
 app = Flask(__name__)
 
 
+class MarkingPeriod:
+    def __init__(self, courses, mp):
+        self.courses = courses
+        self.mp = mp
+
+
 @app.route('/currentMp', methods=['GET'])
 def get_current_mp():
     link = request.args.get('l')
     username = request.args.get('u')
     password = request.args.get('p')
-    soup = methods.main(username, password, link, -1)
+    res = methods.main(username, password, link, -1)
 
     marking_periods = []
-    for x in soup:
-        classes = x.findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(parse.main(classes))
+    for x in res:
+        classes = x[0].findAll("div", {"class": "AssignmentClass"})
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
     return jsonpickle.encode(marking_periods[0], unpicklable=False)
 
@@ -27,12 +33,12 @@ def get_past_mp():
     link = request.args.get('l')
     username = request.args.get('u')
     password = request.args.get('p')
-    soup = methods.main(username, password, link, -2)
+    res = methods.main(username, password, link, -2)
 
     marking_periods = []
-    for x in soup:
-        classes = x.findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(parse.main(classes))
+    for x in res:
+        classes = x[0].findAll("div", {"class": "AssignmentClass"})
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
     return jsonpickle.encode(marking_periods, unpicklable=False)
 
@@ -43,12 +49,12 @@ def get_mp():
     username = request.args.get('u')
     password = request.args.get('p')
     mp = int(request.args.get('mp'))
-    soup = methods.main(username, password, link, mp)
+    res = methods.main(username, password, link, mp)
 
     marking_periods = []
-    for x in soup:
-        classes = x.findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(parse.main(classes))
+    for x in res:
+        classes = x[0].findAll("div", {"class": "AssignmentClass"})
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
     return jsonpickle.encode(marking_periods[0], unpicklable=False)
 

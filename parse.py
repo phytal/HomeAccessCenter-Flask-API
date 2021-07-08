@@ -100,7 +100,6 @@ def main(classes):
         # grades[name] = {"course": course, "name": name, "average": find_total_avg(class_)[0]}
 
         assignment_list = []
-        # TODO: add grade weights for grade predictions
         for assignment in assignments:
             try:
                 a = get_grid(assignment)
