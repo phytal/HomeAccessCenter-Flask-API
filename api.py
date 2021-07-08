@@ -13,6 +13,21 @@ class MarkingPeriod:
         self.mp = mp
 
 
+class MpResponse:
+    def __init__(self, mp):
+        self.mp = mp
+
+
+class CurrentMpResponse:
+    def __init__(self, mp):
+        self.currentMp = mp
+
+
+class PastMpResponse:
+    def __init__(self, mps):
+        self.pastMps = mps
+
+
 @app.route('/currentMp', methods=['GET'])
 def get_current_mp():
     link = request.args.get('l')
@@ -25,7 +40,7 @@ def get_current_mp():
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
         marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
-    return jsonpickle.encode(marking_periods[0], unpicklable=False)
+    return jsonpickle.encode(CurrentMpResponse(marking_periods[0]), unpicklable=False)
 
 
 @app.route('/pastMp', methods=['GET'])
@@ -40,7 +55,7 @@ def get_past_mp():
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
         marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
-    return jsonpickle.encode(marking_periods, unpicklable=False)
+    return jsonpickle.encode(PastMpResponse(marking_periods), unpicklable=False)
 
 
 @app.route('/mp', methods=['GET'])
@@ -56,7 +71,7 @@ def get_mp():
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
         marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
-    return jsonpickle.encode(marking_periods[0], unpicklable=False)
+    return jsonpickle.encode(MpResponse(marking_periods[0]), unpicklable=False)
 
 
 @app.route('/login', methods=['GET'])

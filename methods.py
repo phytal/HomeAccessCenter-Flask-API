@@ -7,16 +7,6 @@ from bs4 import BeautifulSoup
 import form
 
 
-class CurrentMpResponse:
-    def __init__(self, mp):
-        self.mp = mp
-
-
-class PastMpResponse:
-    def __init__(self, mps):
-        self.mps = mps
-
-
 def mechanize_method(username, password, link):
     br = mechanize.Browser()
 
