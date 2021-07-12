@@ -74,7 +74,7 @@ def get_grid(classes):
     type_of_grade = re.findall(r'(?<=Category\: ).*', str(various_things[3]))[0]
     max_points = re.findall(r'(?<=Max Points\: ).*', str(various_things[5]))[0]
 
-    score = re.split('<', results[4])[0][4:].strip()  # actual grade
+    score = format_double(re.split('<', results[4])[0][4:].strip())  # actual grade
     comment = re.search(r'(?<=title=\").*(?=\"/>)', results[4])
     if comment is not None:
         comment = comment.group()
