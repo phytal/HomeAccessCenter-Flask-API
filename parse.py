@@ -11,15 +11,15 @@ class Course:
 
 
 class Assignment:
-    def __init__(self, title_of_assignment, score, date_due, date_assigned, type_of_grade, max_points, can_be_dropped,
+    def __init__(self, title_of_assignment, comment, score, date_due, date_assigned, type_of_grade, max_points,
                  total_points, weight, weighted_score, weighted_total_points, percentage):
         self.title_of_assignment = title_of_assignment
+        self.comment = comment
         self.score = score
         self.date_due = date_due
         self.date_assigned = date_assigned
         self.type_of_grade = type_of_grade
         self.max_points = max_points
-        self.can_be_dropped = can_be_dropped
         self.total_points = total_points
         self.weight = weight
         self.weighted_score = weighted_score
@@ -67,18 +67,19 @@ def get_grid(classes):
         "&amp;", "&")
     type_of_grade = re.findall(r'(?<=Category\: ).*', str(various_things[3]))[0]
     max_points = re.findall(r'(?<=Max Points\: ).*', str(various_things[5]))[0]
-    can_be_dropped = re.findall(r'(?<=Can Be Dropped\: ).*', str(various_things[6]))[
-        0]  # dunno what this does, but kept it for completions sake
 
-    score = results[4].strip()[5:].strip()  # actual grade
-    total_points = get_number(results[5])
-    weight = get_number(results[6])
-    weighted_score = get_number(results[7])
-    weighted_total_points = get_number(results[8])
-    percentage = get_number(results[9])
+    score = re.split('<', results[4])[0][4:].strip()  # actual grade
+    comment = re.search(r'(?<=title=\").*(?=\"/>)', results[4])
+    if comment is not None:
+        comment = comment.group()
+    total_points = results[5][1:]
+    weight = results[6][23:]
+    weighted_score = results[7][23:]
+    weighted_total_points = results[8][23:]
+    percentage = results[9][23:]
 
-    return Assignment(title_of_assignment, score, date_due, date_assigned, type_of_grade,
-                      max_points, can_be_dropped, total_points, weight, weighted_score, weighted_total_points,
+    return Assignment(title_of_assignment, comment, score, date_due, date_assigned, type_of_grade,
+                      max_points, total_points, weight, weighted_score, weighted_total_points,
                       percentage)
 
 
