@@ -76,7 +76,7 @@ def get_grid(classes):
     weight = results[6][23:]
     weighted_score = results[7][23:]
     weighted_total_points = results[8][23:]
-    percentage = results[9][23:]
+    percentage = results[9][23:].replace('%', '')
 
     return Assignment(title_of_assignment, comment, score, date_due, date_assigned, type_of_grade,
                       max_points, total_points, weight, weighted_score, weighted_total_points,
