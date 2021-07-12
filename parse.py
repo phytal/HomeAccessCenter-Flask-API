@@ -34,6 +34,12 @@ class GradeType:
         self.weight = weight
 
 
+def format_double(a):
+    if len(re.findall(r'\d+\.\d+', a)) > 0:
+        a = str(float(a))
+    return a
+
+
 def get_number(local_result):
     return re.findall("\d+\.\d+", local_result)[0]
 
@@ -72,11 +78,14 @@ def get_grid(classes):
     comment = re.search(r'(?<=title=\").*(?=\"/>)', results[4])
     if comment is not None:
         comment = comment.group()
-    total_points = results[5][1:]
-    weight = results[6][23:]
-    weighted_score = results[7][23:]
-    weighted_total_points = results[8][23:]
-    percentage = results[9][23:].replace('%', '')
+    total_points = format_double(results[5][1:])
+    weight = format_double(results[6][23:])
+    weighted_score = format_double(results[7][23:])
+    weighted_total_points = format_double(results[8][23:])
+    percentage = format_double(results[9][23:].replace('%', ''))
+    # formatting
+    if len(re.findall(r'\d+\.\d+', total_points)) > 0:
+        total_points = str(float(total_points))
 
     return Assignment(title_of_assignment, comment, score, date_due, date_assigned, type_of_grade,
                       max_points, total_points, weight, weighted_score, weighted_total_points,
