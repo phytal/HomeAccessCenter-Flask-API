@@ -79,7 +79,7 @@ def get_valid_login():
     link = request.args.get('l')
     username = request.args.get('u')
     password = request.args.get('p')
-    return methods.login(username, password, link)
+    return jsonpickle.encode(methods.login(username, password, link), unpicklable=False)
 
 
 if __name__ == '__main__':

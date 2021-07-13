@@ -66,13 +66,18 @@ def main(u, p, l, mp):
             continue
 
 
+class LoginResponse:
+    def __init__(self, msg):
+        self.msg = msg
+
+
 def login(u, p, l):
     try:
         response = mechanize_method(u, p, l).response()
         soup = BeautifulSoup(response.read(), "lxml")
         if len(soup.find_all('span', text='Your attempt to log in was unsuccessful.')) > 0:
-            return "Failed"
+            return LoginResponse('Failed')
         else:
-            return "Accepted"
+            return LoginResponse('Accepted')
     except URLError:
         return "Failed"
