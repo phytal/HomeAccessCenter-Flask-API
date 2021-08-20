@@ -100,6 +100,7 @@ def main(classes):
         categories = []
         if len(grid) > 0:
             assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
+        if len(grid) > 1:
             categories = grid[1].findAll("tr", {"class": "sg-asp-table-data-row"})
         grade_data = []
         for res in categories:
