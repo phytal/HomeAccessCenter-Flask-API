@@ -96,8 +96,11 @@ def main(classes):
     courses = []
     for class_ in classes:  # like, alg2, chem, etc etc
         grid = class_.findAll("table", {"class": "sg-asp-table"})  # grid
-        assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
-        categories = grid[1].findAll("tr", {"class": "sg-asp-table-data-row"})
+        assignments = []
+        categories = []
+        if len(grid) > 0:
+            assignments = grid[0].findAll("tr", {"class": "sg-asp-table-data-row"})  # every assignment
+            categories = grid[1].findAll("tr", {"class": "sg-asp-table-data-row"})
         grade_data = []
         for res in categories:
             dt = res.findAll("td")
@@ -106,7 +109,7 @@ def main(classes):
         full_name = find_name(class_).strip()
         course = re.findall("\w+\s-\s\d+\s", full_name)[0].strip()
         name = re.sub("\w+\s-\s\d+\s", "", full_name).strip()
-        average = find_total_avg(class_)[0]
+        average = find_total_avg(class_)[0] if len(find_total_avg(class_)) > 0 else 0
         # grades[name] = {"course": course, "name": name, "average": find_total_avg(class_)[0]}
 
         assignment_list = []
