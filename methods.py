@@ -39,8 +39,8 @@ def fetch_grades(br, link, mp):
     marking_periods = []
     # -1: other, 0: current, rest start from 1
     if mp < 0:
-        for i in range(1, int(p[len(p)-1][0])):
-            if i == p[0][0]:
+        for i in range(1, int(p[len(p)-1][0])+1):
+            if i == int(p[0][0]):
                 continue
             data = form.generate_form(soup)
             data["ctl00$plnMain$ddlReportCardRuns"] = p[i]
