@@ -8,9 +8,10 @@ app = Flask(__name__)
 
 
 class MarkingPeriod:
-    def __init__(self, courses, mp):
+    def __init__(self, courses, mp, current):
         self.courses = courses
         self.mp = mp
+        self.current = current
 
 
 class MpResponse:
@@ -25,7 +26,7 @@ class CurrentMpResponse:
 
 class OtherMpResponse:
     def __init__(self, mps):
-        self.pastMps = mps
+        self.otherMps = mps
 
 
 @app.route('/currentMp', methods=['GET'])
@@ -38,7 +39,7 @@ def get_current_mp():
     marking_periods = []
     for x in res:
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1], x[2]))
 
     return jsonpickle.encode(CurrentMpResponse(marking_periods[0]), unpicklable=False)
 
@@ -53,7 +54,7 @@ def get_other_mp():
     marking_periods = []
     for x in res:
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1], x[2]))
 
     return jsonpickle.encode(OtherMpResponse(marking_periods), unpicklable=False)
 
@@ -69,7 +70,7 @@ def get_mp():
     marking_periods = []
     for x in res:
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1], x[2]))
 
     return jsonpickle.encode(MpResponse(marking_periods[0]), unpicklable=False)
 

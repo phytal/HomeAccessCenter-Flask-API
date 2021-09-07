@@ -46,15 +46,15 @@ def fetch_grades(br, link, mp):
             data["ctl00$plnMain$ddlReportCardRuns"] = p[i]
             req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
             res = br.open(req).read()
-            marking_periods.append([BeautifulSoup(res, 'lxml'), p[i][0]])
-    elif mp == 0:
-        marking_periods.append([soup, p[0][0]])
+            marking_periods.append([BeautifulSoup(res, 'lxml'), p[i][0], False])
+    elif mp == 0 or mp == int(p[0][0]):
+        marking_periods.append([soup, p[0][0], True])
     else:
         data = form.generate_form(soup)
         data["ctl00$plnMain$ddlReportCardRuns"] = p[mp]
         req = mechanize.Request('https://' + link + '/HomeAccess/Content/Student/Assignments.aspx', data)
         res = br.open(req).read()
-        marking_periods.append([BeautifulSoup(res, 'lxml'), p[mp][0]])
+        marking_periods.append([BeautifulSoup(res, 'lxml'), p[mp][0], False])
 
     br.close()
     return marking_periods
