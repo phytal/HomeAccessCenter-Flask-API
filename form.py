@@ -6,6 +6,8 @@ def generate_periods(soup):
     for x in periods:
         if str(x.string) != '\n':
             p.append(x['value'])
+            if 'selected' in str(x):
+                p.insert(1, x['value'])
     p.pop(0)
     return p
 

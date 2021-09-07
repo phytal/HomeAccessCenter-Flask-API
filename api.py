@@ -23,13 +23,28 @@ class CurrentMpResponse:
         self.currentMp = mp
 
 
-class PastMpResponse:
+class OtherMpResponse:
     def __init__(self, mps):
         self.pastMps = mps
 
 
 @app.route('/currentMp', methods=['GET'])
 def get_current_mp():
+    link = request.args.get('l')
+    username = request.args.get('u')
+    password = request.args.get('p')
+    res = methods.main(username, password, link, 0)
+
+    marking_periods = []
+    for x in res:
+        classes = x[0].findAll("div", {"class": "AssignmentClass"})
+        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
+
+    return jsonpickle.encode(CurrentMpResponse(marking_periods[0]), unpicklable=False)
+
+# TODO : OTHER MP
+@app.route('/otherMp', methods=['GET'])
+def get_other_mp():
     link = request.args.get('l')
     username = request.args.get('u')
     password = request.args.get('p')
@@ -40,22 +55,7 @@ def get_current_mp():
         classes = x[0].findAll("div", {"class": "AssignmentClass"})
         marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
 
-    return jsonpickle.encode(CurrentMpResponse(marking_periods[0]), unpicklable=False)
-
-
-@app.route('/pastMp', methods=['GET'])
-def get_past_mp():
-    link = request.args.get('l')
-    username = request.args.get('u')
-    password = request.args.get('p')
-    res = methods.main(username, password, link, -2)
-
-    marking_periods = []
-    for x in res:
-        classes = x[0].findAll("div", {"class": "AssignmentClass"})
-        marking_periods.append(MarkingPeriod(parse.main(classes), x[1]))
-
-    return jsonpickle.encode(PastMpResponse(marking_periods), unpicklable=False)
+    return jsonpickle.encode(OtherMpResponse(marking_periods), unpicklable=False)
 
 
 @app.route('/mp', methods=['GET'])
